@@ -1,0 +1,8 @@
+CREATE TABLE comment (  
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(250) NOT NULL,
+    comment VARCHAR(500),
+    post_id INTEGER NOT NULL,
+    date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES post(id)
+);

@@ -1,0 +1,1 @@
+ALTER TABLE post ADD COLUMN title VARCHAR(500) DEFAULT 'untitled';
