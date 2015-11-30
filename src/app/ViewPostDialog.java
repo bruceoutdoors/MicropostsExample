@@ -50,28 +50,30 @@ public class ViewPostDialog extends javax.swing.JDialog {
         ResultSet rs = core.DB.getInstance().executeQuery(sql);
         rs.next();
         titleLbl.setText(rs.getString("title"));
-        nameLbl.setText("Written by " + rs.getString("name"));
+        nameLbl.setText("Written by " + rs.getString("name") + " (" + rs.getString("date_created") + ")");
         contentAreaTxt.setText(rs.getString("content"));
         
         commentPanel.removeAll();
         sql = "SELECT * FROM comment WHERE post_id = " + Integer.toString(id);
         rs = core.DB.getInstance().executeQuery(sql);
-        
+
         while(rs.next()) {
-            addPost(rs.getString("name"), rs.getString("comment"));
+            addPost(rs.getString("name"), 
+                    rs.getString("comment"), 
+                    rs.getString("date_created"));
         }
         
         validate();
     }
     
-    private void addPost(String name, String content) {
+    private void addPost(String name, String content, String dateCreated) {
         JTextArea ta = new JTextArea(content);
         ta.setWrapStyleWord(true);
         ta.setLineWrap(true);
         ta.setEditable(false);
 
         JPanel lf = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel auth = new JLabel("Comment by " + name);
+        JLabel auth = new JLabel("Comment by " + name + " (" + dateCreated + ")");
         lf.add(auth);
 
         commentPanel.add(lf);
