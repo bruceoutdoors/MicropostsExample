@@ -8,4 +8,5 @@ A: The doctor is his mom!'),
 
 INSERT INTO post (name, date_created, content) VALUES
 ('Bruce', '2014-08-12 09:23:12', 'Following example uses PrepareStatement method to create PreparedStatement. It also uses setInt & setString methods of PreparedStatement to set parameters of PreparedStatement.'),
-('SQLite', '2000-05-22 15:11', 'All five date and time functions take a time string as an argument. The time string is followed by zero or more modifiers. The strftime() function also takes a format string as its first argument..'); 
+('SQLite', '2000-05-22 15:11:10', 'All five date and time functions take a time string as an argument. The time string is followed by zero or more modifiers. The strftime() function also takes a format string as its first argument..'),
+('Sinchew', '2015-11-29 17:17:00', '（彭亨‧北根29日訊）首相拿督斯里納吉說，我國曾於2013年發生蘇祿軍侵入事件，導致10名軍警為國犧牲，也有2名平民受害；假如我國人民還可以非常友善、笑容滿臉地與曾經侵入我國的蘇祿軍相關人士合照，這則會傷了沙巴人及為國犧牲軍警家屬的心。'); 
