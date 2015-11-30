@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,9 +59,12 @@ public class ViewPostDialog extends javax.swing.JDialog {
         rs = core.DB.getInstance().executeQuery(sql);
 
         while(rs.next()) {
+            java.util.Date d = core.DB.getDate(rs, "date_created");
+            String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(d);
             addPost(rs.getString("name"), 
                     rs.getString("comment"), 
-                    rs.getString("date_created"));
+                    dStr
+            );
         }
         
         validate();

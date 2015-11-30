@@ -8,6 +8,8 @@ package app;
 import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -104,13 +106,14 @@ public class AddCommentDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addCommentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCommentBtnActionPerformed
-        String sql = "INSERT INTO comment (name, comment, post_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO comment (name, comment, post_id, date_created) VALUES (?, ?, ?, ?)";
         
         try {
             PreparedStatement ps = core.DB.getInstance().getPreparedStatement(sql);
             ps.setString(1, nameField.getText());
             ps.setString(2, commenTxtArea.getText());
             ps.setInt(3, postId);
+            ps.setString(4, core.DB.getDateString(new java.util.Date()));
             
             ps.executeUpdate();
             JOptionPane.showMessageDialog(this, "Comment has successfully been posted.", "Successfully added comment!", JOptionPane.INFORMATION_MESSAGE);

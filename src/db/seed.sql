@@ -7,5 +7,5 @@ A: The doctor is his mom!'),
 ('Bane', 'Oh, you think darkness is your ally.', 'But you merely adopted the dark; I was born in it, moulded by it. I didnt see the light until I was already a man, by then it was nothing to me but BLINDING!');
 
 INSERT INTO post (name, date_created, content) VALUES
-('Bruce', '2014-8-12 09:23:12', 'Following example uses PrepareStatement method to create PreparedStatement. It also uses setInt & setString methods of PreparedStatement to set parameters of PreparedStatement.'),
-('SQLite', '2000-5-22 15:11', 'All five date and time functions take a time string as an argument. The time string is followed by zero or more modifiers. The strftime() function also takes a format string as its first argument..'); 
+('Bruce', '2014-08-12 09:23:12', 'Following example uses PrepareStatement method to create PreparedStatement. It also uses setInt & setString methods of PreparedStatement to set parameters of PreparedStatement.'),
+('SQLite', '2000-05-22 15:11', 'All five date and time functions take a time string as an argument. The time string is followed by zero or more modifiers. The strftime() function also takes a format string as its first argument..'); 

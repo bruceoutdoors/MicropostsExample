@@ -12,6 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -31,32 +34,37 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    public MainWindow()  {
+    public MainWindow() {
         initComponents();
 
         postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
-        
+
         refreshPosts();
     }
-    
+
     private void refreshPosts() {
         postPanel.removeAll();
         core.DB db = core.DB.getInstance();
         ResultSet rs = null;
         try {
-            rs = db.executeQuery("SELECT * FROM post ORDER BY date_created");
+            rs = db.executeQuery("SELECT * FROM post ORDER BY date_created DESC");
             while (rs.next()) {
+                Date d = core.DB.getDate(rs, "date_created");
                 addPost(rs.getInt("id"),
                         rs.getString("title"),
-                        rs.getString("name"),
+                        rs.getString("name") + new SimpleDateFormat(" (MMM yy)").format(d),
                         rs.getString("content"));
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             System.err.println(ex.toString());
             return;
         }
-        
+
         validate();
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            jScrollPane1.getVerticalScrollBar().setValue(0);
+        });
     }
 
     private void addPost(int id, String title, String author, String content) {
