@@ -11,23 +11,15 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 /**
  *
- * @author bruceoutdoors
+ * @author Lee Zhen Yong (bruceoutdoors@gmail.com)
  */
 public class MainWindow extends javax.swing.JFrame {
 
@@ -174,18 +166,6 @@ public class MainWindow extends javax.swing.JFrame {
         new AddPostDialog(this, true).setVisible(true);
         refreshPosts();
     }//GEN-LAST:event_addPostBtnActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainWindow().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPostBtn;

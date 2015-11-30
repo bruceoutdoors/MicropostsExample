@@ -8,13 +8,11 @@ package app;
 import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author bruceoutdoors
+ * @author Lee Zhen Yong (bruceoutdoors@gmail.com)
  */
 public class AddPostDialog extends javax.swing.JDialog {
 

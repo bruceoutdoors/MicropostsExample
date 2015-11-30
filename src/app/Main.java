@@ -2,8 +2,6 @@ package app;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -18,8 +16,8 @@ public class Main {
                 db.seedDb();
             } catch (IOException | SQLException ex) {
                 System.err.println("Error when Attempting to seed database: " + ex.toString());
-                
-            } 
+
+            }
             return;
         }
 

@@ -8,16 +8,13 @@ package app;
 import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author bruceoutdoors
+ * @author Lee Zhen Yong (bruceoutdoors@gmail.com)
  */
 public class AddCommentDialog extends javax.swing.JDialog {
     final private int postId;

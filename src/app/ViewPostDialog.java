@@ -5,18 +5,10 @@
  */
 package app;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -26,7 +18,7 @@ import javax.swing.JTextArea;
 
 /**
  *
- * @author bruceoutdoors
+ * @author Lee Zhen Yong (bruceoutdoors@gmail.com)
  */
 public class ViewPostDialog extends javax.swing.JDialog {
 
