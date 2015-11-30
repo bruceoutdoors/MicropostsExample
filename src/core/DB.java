@@ -22,7 +22,7 @@ import org.flywaydb.core.Flyway;
  */
 public class DB {
 
-    private static final String DB_URL = "jdbc:sqlite:database.db";
+    private static final String DB_URL = "jdbc:derby:database;create=true";
     private static final String MIGRATION_DIR = "db.migrations";
     private static final String SEED_FILE = "/db/seed.sql";
 
@@ -34,9 +34,6 @@ public class DB {
         migrateDb();
 
         mConnection = DriverManager.getConnection(DB_URL);
-
-        // enable foreign key support in SQLite:
-        executeUpdate("PRAGMA foreign_keys = ON");
     }
 
     public DB(Connection mConnection) {
@@ -89,31 +86,5 @@ public class DB {
         flyway.setDataSource(DB_URL, null, null);
         flyway.setLocations(MIGRATION_DIR);
         flyway.migrate();
-    }
-    
-    public static String getDateString(Date d) {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(d);
-    }
-
-    public static Date getDate(ResultSet rs, String columnName) {
-        // NOTE: Don't use Julian Date. It's not supported here
-        final String DATE_FORMATS[] = {
-            "yyyy-MM-dd HH:mm:ss.SSS", "yyyy-MM-dd'T'HH:mm:ss.SSS",
-            "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ss",
-            "yyyy-MM-dd HH:mm", "yyyy-MM-dd'T'HH:mm",
-            "yyyy-MM-dd", "HH:mm:ss.SSS", "HH:mm:ss", "HH:mm"
-        };
-
-        for (String format : DATE_FORMATS) {
-            try {
-                return new SimpleDateFormat(format).parse(rs.getString(columnName));
-            } catch (ParseException ex) {} // ignore parse exceptions; try next format
-            catch (SQLException ex) {
-                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
-                break;
-            }
-        }
-
-        return null;
     }
 }

@@ -51,7 +51,8 @@ public class ViewPostDialog extends javax.swing.JDialog {
         ResultSet rs = core.DB.getInstance().executeQuery(sql);
         rs.next();
         titleLbl.setText(rs.getString("title"));
-        nameLbl.setText("Written by " + rs.getString("name") + " (" + rs.getString("date_created") + ")");
+        nameLbl.setText("Written by " + rs.getString("name") + " (" + 
+                new SimpleDateFormat("dd MMMM yyyy, h:mma").format(rs.getTimestamp("date_created")) + ")");
         contentAreaTxt.setText(rs.getString("content"));
         
         commentPanel.removeAll();
@@ -59,8 +60,7 @@ public class ViewPostDialog extends javax.swing.JDialog {
         rs = core.DB.getInstance().executeQuery(sql);
 
         while(rs.next()) {
-            java.util.Date d = core.DB.getDate(rs, "date_created");
-            String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(d);
+            String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(rs.getTimestamp("date_created"));
             addPost(rs.getString("name"), 
                     rs.getString("comment"), 
                     dStr

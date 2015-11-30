@@ -113,7 +113,7 @@ public class AddCommentDialog extends javax.swing.JDialog {
             ps.setString(1, nameField.getText());
             ps.setString(2, commenTxtArea.getText());
             ps.setInt(3, postId);
-            ps.setString(4, core.DB.getDateString(new java.util.Date()));
+            ps.setTimestamp(4, new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis()));
             
             ps.executeUpdate();
             JOptionPane.showMessageDialog(this, "Comment has successfully been posted.", "Successfully added comment!", JOptionPane.INFORMATION_MESSAGE);
