@@ -10,10 +10,9 @@ import java.sql.SQLException;
 public class Main {
 
     public static void main(String[] args) {
-        core.DB db = core.DB.getInstance();
         if (args.length > 0 && args[0].equals("seed")) {
             try {
-                db.seedDb();
+                core.DB.getInstance().seedDb();
             } catch (IOException | SQLException ex) {
                 System.err.println("Error when Attempting to seed database: " + ex.toString());
 
