@@ -49,7 +49,7 @@ public class MainWindow extends javax.swing.JFrame {
         try {
             rs = db.executeQuery("SELECT * FROM post ORDER BY date_created DESC");
             while (rs.next()) {
-                String d = new SimpleDateFormat(" (MMM yy)").format(rs.getTimestamp("date_created"));
+                String d = new SimpleDateFormat(" (MMM d)").format(rs.getTimestamp("date_created"));
                 addPost(rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("name") + d,
