@@ -7,3 +7,5 @@ nbactions.xml
 .nb-gradle/
 *.db
 database/
+nbproject/build-impl.xml
+nbproject/genfiles.properties
