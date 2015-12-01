@@ -119,10 +119,8 @@ public class AddPostDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Post has successfully been added.", "Successfully added post!", JOptionPane.INFORMATION_MESSAGE);
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.toString(), "Invalid content", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.toString(), "Invalid content... or some shit like that", JOptionPane.ERROR_MESSAGE);
         }
-        
-        
     }//GEN-LAST:event_addPostBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPostBtn;

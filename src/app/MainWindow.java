@@ -54,6 +54,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         validate();
 
+        // puts scrollbar to the top
         javax.swing.SwingUtilities.invokeLater(() -> {
             jScrollPane1.getVerticalScrollBar().setValue(0);
         });
