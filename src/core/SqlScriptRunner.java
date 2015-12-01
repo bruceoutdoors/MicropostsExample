@@ -24,7 +24,6 @@ package core;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -51,11 +50,6 @@ public class SqlScriptRunner {
     private final boolean stopOnError;
     private final boolean autoCommit;
 
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    private PrintWriter logWriter = new PrintWriter(System.out);
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    private PrintWriter errorLogWriter = new PrintWriter(System.err);
-
     private String delimiter = DEFAULT_DELIMITER;
     private boolean fullLineDelimiter = false;
 
@@ -72,24 +66,6 @@ public class SqlScriptRunner {
     public void setDelimiter(String delimiter, boolean fullLineDelimiter) {
         this.delimiter = delimiter;
         this.fullLineDelimiter = fullLineDelimiter;
-    }
-
-    /**
-     * Setter for logWriter property
-     *
-     * @param logWriter - the new value of the logWriter property
-     */
-    public void setLogWriter(PrintWriter logWriter) {
-        this.logWriter = logWriter;
-    }
-
-    /**
-     * Setter for errorLogWriter property
-     *
-     * @param errorLogWriter - the new value of the errorLogWriter property
-     */
-    public void setErrorLogWriter(PrintWriter errorLogWriter) {
-        this.errorLogWriter = errorLogWriter;
     }
 
     /**
@@ -142,7 +118,7 @@ public class SqlScriptRunner {
                 } else if (delimMatch.matches()) {
                     setDelimiter(delimMatch.group(2), false);
                 } else if (trimmedLine.startsWith("--")) {
-                    println(trimmedLine);
+                    System.out.println(trimmedLine);
                 } else if (trimmedLine.length() < 1
                         || trimmedLine.startsWith("--")) {
                     // Do nothing
@@ -155,17 +131,17 @@ public class SqlScriptRunner {
                     command.append(" ");
                     Statement statement = conn.createStatement();
 
-                    println(command);
+                    System.out.println(command);
 
                     boolean hasResults = false;
                     try {
                         hasResults = statement.execute(command.toString());
                     } catch (SQLException e) {
-                        final String errText = String.format("Error executing '%s' (line %d): %s", command, lineReader.getLineNumber(), e.getMessage());
+                        final String errText = String.format("ERROR at line %d: '%s'\n<<...Now printing source of error...>>\n%s", lineReader.getLineNumber(), e.getMessage(), command);
                         if (stopOnError) {
                             throw new SQLException(errText, e);
                         } else {
-                            println(errText);
+                            System.err.println(errText);
                         }
                     }
 
@@ -179,15 +155,15 @@ public class SqlScriptRunner {
                         int cols = md.getColumnCount();
                         for (int i = 0; i < cols; i++) {
                             String name = md.getColumnLabel(i);
-                            print(name + "\t");
+                            System.out.print(name + "\t");
                         }
-                        println("");
+                        System.out.println("");
                         while (rs.next()) {
                             for (int i = 0; i < cols; i++) {
                                 String value = rs.getString(i);
-                                print(value + "\t");
+                                System.out.print(value + "\t");
                             }
-                            println("");
+                            System.out.println("");
                         }
                     }
 
@@ -209,39 +185,10 @@ public class SqlScriptRunner {
             throw new IOException(String.format("Error executing '%s': %s", command, e.getMessage()), e);
         } finally {
             conn.rollback();
-            flush();
         }
     }
 
     private String getDelimiter() {
         return delimiter;
-    }
-
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
-    private void print(Object o) {
-        if (logWriter != null) {
-            System.out.print(o);
-        }
-    }
-
-    private void println(Object o) {
-        if (logWriter != null) {
-            logWriter.println(o);
-        }
-    }
-
-    private void printlnError(Object o) {
-        if (errorLogWriter != null) {
-            errorLogWriter.println(o);
-        }
-    }
-
-    private void flush() {
-        if (logWriter != null) {
-            logWriter.flush();
-        }
-        if (errorLogWriter != null) {
-            errorLogWriter.flush();
-        }
     }
 }
