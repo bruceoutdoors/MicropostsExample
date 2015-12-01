@@ -61,17 +61,17 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void addPost(int id, String title, String author, String content) {
         java.awt.Frame thisWindow = this;
-        JTextArea ta = new JTextArea(content);
-        ta.setWrapStyleWord(true);
-        ta.setLineWrap(true);
-        ta.setEditable(false);
+        JTextArea contentTxtArea = new JTextArea(content);
+        contentTxtArea.setWrapStyleWord(true);
+        contentTxtArea.setLineWrap(true);
+        contentTxtArea.setEditable(false);
 
-        JLabel l = new JLabel(title);
-        Font ff = l.getFont();
-        l.setFont(new Font(ff.getName(), Font.PLAIN, ff.getSize() + 5));
-        JPanel lf = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        l.setForeground(Color.BLUE);
-        l.addMouseListener(new MouseAdapter() {
+        JLabel titleLbl = new JLabel(title);
+        Font titleFont = titleLbl.getFont();
+        titleLbl.setFont(new Font(titleFont.getName(), Font.PLAIN, titleFont.getSize() + 5));
+        JPanel leftAlignPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        titleLbl.setForeground(Color.BLUE);
+        titleLbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 new ViewPostDialog(thisWindow, true, id).setVisible(true);
@@ -79,22 +79,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                l.setForeground(Color.MAGENTA);
+                titleLbl.setForeground(Color.MAGENTA);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                l.setForeground(Color.BLUE);
+                titleLbl.setForeground(Color.BLUE);
             }
         });
-        lf.add(l);
+        
         JLabel auth = new JLabel("Written by " + author);
 
-//            author.setFont();
-        lf.add(auth);
+        leftAlignPanel.add(titleLbl);
+        leftAlignPanel.add(auth);
 
-        postPanel.add(lf);
-        postPanel.add(ta);
+        postPanel.add(leftAlignPanel);
+        postPanel.add(contentTxtArea);
     }
 
     /**

@@ -47,6 +47,7 @@ public class AddCommentDialog extends javax.swing.JDialog {
 
         commenTxtArea.setColumns(20);
         commenTxtArea.setRows(5);
+        commenTxtArea.setText("Anonymous was here.");
         jScrollPane1.setViewportView(commenTxtArea);
 
         nameField.setText("Anonymous");

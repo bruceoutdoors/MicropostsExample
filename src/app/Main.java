@@ -15,7 +15,6 @@ public class Main {
                 core.DB.getInstance().seedDb();
             } catch (IOException | SQLException ex) {
                 System.err.println("Error when Attempting to seed database: " + ex.toString());
-
             }
             return;
         }

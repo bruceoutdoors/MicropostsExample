@@ -30,50 +30,51 @@ public class ViewPostDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         commentPanel.setLayout(new BoxLayout(commentPanel, BoxLayout.Y_AXIS));
+
+        setPostId(id);
+    }
+    
+    public void setPostId(int id) {
         try {
-            setPostId(id);
+            mId = id;
+            String sql = "SELECT * FROM post WHERE id = " + Integer.toString(id);
+            ResultSet rs = core.DB.getInstance().executeQuery(sql);
+            rs.next();
+            titleLbl.setText(rs.getString("title"));
+            nameLbl.setText("Written by " + rs.getString("name") + " (" +
+                    new SimpleDateFormat("dd MMMM yyyy, h:mma").format(rs.getTimestamp("date_created")) + ")");
+            contentAreaTxt.setText(rs.getString("content"));
+            
+            commentPanel.removeAll();
+            sql = "SELECT * FROM comment WHERE post_id = " + Integer.toString(id);
+            rs = core.DB.getInstance().executeQuery(sql);
+            
+            while(rs.next()) {
+                String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(rs.getTimestamp("date_created"));
+                addPost(rs.getString("name"),
+                        rs.getString("comment"),
+                        dStr
+                );
+            }
+            
+            validate();
         } catch (SQLException ex) {
             Logger.getLogger(ViewPostDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void setPostId(int id) throws SQLException {
-        mId = id;
-        String sql = "SELECT * FROM post WHERE id = " + Integer.toString(id);
-        ResultSet rs = core.DB.getInstance().executeQuery(sql);
-        rs.next();
-        titleLbl.setText(rs.getString("title"));
-        nameLbl.setText("Written by " + rs.getString("name") + " (" + 
-                new SimpleDateFormat("dd MMMM yyyy, h:mma").format(rs.getTimestamp("date_created")) + ")");
-        contentAreaTxt.setText(rs.getString("content"));
-        
-        commentPanel.removeAll();
-        sql = "SELECT * FROM comment WHERE post_id = " + Integer.toString(id);
-        rs = core.DB.getInstance().executeQuery(sql);
-
-        while(rs.next()) {
-            String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(rs.getTimestamp("date_created"));
-            addPost(rs.getString("name"), 
-                    rs.getString("comment"), 
-                    dStr
-            );
-        }
-        
-        validate();
-    }
-    
     private void addPost(String name, String content, String dateCreated) {
-        JTextArea ta = new JTextArea(content);
-        ta.setWrapStyleWord(true);
-        ta.setLineWrap(true);
-        ta.setEditable(false);
+        JTextArea contentTxtArea = new JTextArea(content);
+        contentTxtArea.setWrapStyleWord(true);
+        contentTxtArea.setLineWrap(true);
+        contentTxtArea.setEditable(false);
 
-        JPanel lf = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel leftAlignPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel auth = new JLabel("Comment by " + name + " (" + dateCreated + ")");
-        lf.add(auth);
+        leftAlignPanel.add(auth);
 
-        commentPanel.add(lf);
-        commentPanel.add(ta);
+        commentPanel.add(leftAlignPanel);
+        commentPanel.add(contentTxtArea);
     }
 
     /**
@@ -180,11 +181,7 @@ public class ViewPostDialog extends javax.swing.JDialog {
 
     private void addCommentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCommentBtnActionPerformed
         new AddCommentDialog(this, true, mId).setVisible(true);
-        try {
-            setPostId(mId);
-        } catch (SQLException ex) {
-            Logger.getLogger(ViewPostDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        setPostId(mId);
     }//GEN-LAST:event_addCommentBtnActionPerformed
 
 
