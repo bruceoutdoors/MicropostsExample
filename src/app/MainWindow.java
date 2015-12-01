@@ -6,15 +6,21 @@
 package app;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
@@ -88,7 +94,7 @@ public class MainWindow extends javax.swing.JFrame {
                 titleLbl.setForeground(Color.BLUE);
             }
         });
-        
+
         JLabel auth = new JLabel("Written by " + author);
 
         leftAlignPanel.add(titleLbl);
@@ -110,6 +116,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         postPanel = new javax.swing.JPanel();
         addPostBtn = new javax.swing.JButton();
+        seedBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Microposting Example");
@@ -137,6 +144,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        seedBtn.setText("Seed");
+        seedBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seedBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -144,19 +158,22 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(addPostBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(seedBtn)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(addPostBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addPostBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(seedBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
@@ -168,9 +185,36 @@ public class MainWindow extends javax.swing.JFrame {
         refreshPosts();
     }//GEN-LAST:event_addPostBtnActionPerformed
 
+    private void seedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedBtnActionPerformed
+        try {
+            core.DB.getInstance().seedDb();
+            JOptionPane.showMessageDialog(this, "Database Seeded.", 
+                    "What the title says.", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            refreshPosts();
+        } catch (IOException | SQLException ex) {
+            // instead of printing the whole exception (ex.toString()), 
+            // we get only the root cause
+            String rootCause = ex.getCause().getMessage();
+            
+            // SQL error messages can be long; use a scroll pane 
+            JScrollPane scrollPane = new JScrollPane();
+            scrollPane.setPreferredSize(new Dimension(300,200));
+            JTextArea textArea = new JTextArea(rootCause);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setMargin(new Insets(5, 5, 5, 5));
+            scrollPane.getViewport().setView(textArea);
+            JOptionPane.showMessageDialog(this, scrollPane, 
+                    "Error when Attempting to seed database", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_seedBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPostBtn;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel postPanel;
+    private javax.swing.JButton seedBtn;
     // End of variables declaration//GEN-END:variables
 }

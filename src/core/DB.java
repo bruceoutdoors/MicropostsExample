@@ -71,7 +71,7 @@ public class DB {
     }
 
     public void seedDb() throws IOException, SQLException {
-        SqlScriptRunner runner = new SqlScriptRunner(mConnection, false, false);
+        SqlScriptRunner runner = new SqlScriptRunner(mConnection, false, true);
         InputStream in = DB.class.getResourceAsStream(SEED_FILE);
         runner.runScript(new BufferedReader(new InputStreamReader(in)));
     }
