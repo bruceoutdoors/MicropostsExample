@@ -19,7 +19,6 @@ public class DB {
 
     private static final String DB_URL = "jdbc:derby:database;create=true";
     private static final String MIGRATION_DIR = "db.migrations";
-    private static final String SEED_FILE = "/db/seed.sql";
 
     private static DB instance = null;
 
@@ -68,12 +67,6 @@ public class DB {
         }
 
         return true;
-    }
-
-    public void seedDb() throws IOException, SQLException {
-        SqlScriptRunner runner = new SqlScriptRunner(mConnection, false, true);
-        InputStream in = DB.class.getResourceAsStream(SEED_FILE);
-        runner.runScript(new BufferedReader(new InputStreamReader(in)));
     }
 
     private void migrateDb() {
