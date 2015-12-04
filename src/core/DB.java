@@ -1,9 +1,5 @@
 package core;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -28,10 +24,6 @@ public class DB {
         migrateDb();
 
         mConnection = DriverManager.getConnection(DB_URL);
-    }
-
-    public DB(Connection mConnection) {
-        this.mConnection = mConnection;
     }
 
     public static DB getInstance() {
