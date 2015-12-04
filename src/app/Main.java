@@ -1,8 +1,5 @@
 package app;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 /**
  *
  * @author Lee Zhen Yong (bruceoutdoors@gmail.com)
