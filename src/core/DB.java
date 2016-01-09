@@ -1,10 +1,11 @@
 package core;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import app.Transaction;
 import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import org.flywaydb.core.Flyway;
 
 /**
@@ -13,17 +14,19 @@ import org.flywaydb.core.Flyway;
  */
 public class DB {
 
+    private static final String PERSISTENCE_UNIT_NAME = "MicropostsExamplePU";
     private static final String DB_URL = "jdbc:derby:database;create=true";
     private static final String MIGRATION_DIR = "db.migrations";
 
     private static DB instance = null;
-
-    private final Connection mConnection;
-
+    
+    private final EntityManager em;
+    
     private DB() throws SQLException {
         migrateDb();
-
-        mConnection = DriverManager.getConnection(DB_URL);
+        em = Persistence
+                .createEntityManagerFactory(PERSISTENCE_UNIT_NAME)
+                .createEntityManager();
     }
 
     public static DB getInstance() {
@@ -39,26 +42,26 @@ public class DB {
         return instance;
     }
 
-    public int executeUpdate(String sql) throws SQLException {
-        return mConnection.createStatement().executeUpdate(sql);
+    public Query createQuery(String q) {
+        return em.createQuery(q);
     }
 
-    public ResultSet executeQuery(String sql) throws SQLException {
-        return mConnection.createStatement().executeQuery(sql);
+    public Query createNamedQuery(String q) {
+        return em.createNamedQuery(q);
     }
 
-    public PreparedStatement getPreparedStatement(String sql) throws SQLException {
-        return mConnection.prepareStatement(sql);
+    public void execTransaction(Transaction t) throws PersistenceException {
+        em.getTransaction().begin();
+        t.execute();
+        em.getTransaction().commit();
     }
-
-    public boolean hasTable(String tableName) {
-        try {
-            executeQuery("SELECT count(*) FROM " + tableName);
-        } catch (SQLException ex) {
-            return false;
-        }
-
-        return true;
+    
+    public void persist(Object entity) throws PersistenceException {
+        execTransaction(()->{ em.persist(entity); });
+    }
+    
+    public void remove(Object entity) throws PersistenceException {
+        execTransaction(()->{ em.remove(entity); });
     }
 
     private void migrateDb() {

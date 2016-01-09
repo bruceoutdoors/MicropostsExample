@@ -8,6 +8,7 @@ package app;
 import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.persistence.PersistenceException;
 import javax.swing.JOptionPane;
 
 /**
@@ -108,17 +109,16 @@ public class AddPostDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addPostBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPostBtnActionPerformed
-        String sql = "INSERT INTO post (name, title, content) VALUES (?, ?, ?)";
         try {
-            PreparedStatement ps = core.DB.getInstance().getPreparedStatement(sql);
-            ps.setString(1, authorField.getText());
-            ps.setString(2, titleField.getText());
-            ps.setString(3, postTxtArea.getText());
-            ps.executeUpdate();
+            Post p = new Post();
+            p.setContent(postTxtArea.getText());
+            p.setName(authorField.getText());
+            p.setTitle(titleField.getText());
+            core.DB.getInstance().persist(p);
             
             JOptionPane.showMessageDialog(this, "Post has successfully been added.", "Successfully added post!", JOptionPane.INFORMATION_MESSAGE);
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        } catch (SQLException ex) {
+        } catch (PersistenceException ex) {
             JOptionPane.showMessageDialog(this, ex.toString(), "Invalid content... or some shit like that", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_addPostBtnActionPerformed

@@ -6,11 +6,10 @@
 package app;
 
 import java.awt.FlowLayout;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,28 +36,27 @@ public class ViewPostDialog extends javax.swing.JDialog {
     public void setPostId(int id) {
         try {
             mId = id;
-            String sql = "SELECT * FROM post WHERE id = " + Integer.toString(id);
-            ResultSet rs = core.DB.getInstance().executeQuery(sql);
-            rs.next();
-            titleLbl.setText(rs.getString("title"));
-            nameLbl.setText("Written by " + rs.getString("name") + " (" +
-                    new SimpleDateFormat("dd MMMM yyyy, h:mma").format(rs.getTimestamp("date_created")) + ")");
-            contentAreaTxt.setText(rs.getString("content"));
+            Post p = (Post) core.DB.getInstance()
+                    .createNamedQuery("Post.findById")
+                    .setParameter("id", id)
+                    .getSingleResult();
+            titleLbl.setText(p.getTitle());
+            nameLbl.setText("Written by " + p.getName() + " (" +
+                    new SimpleDateFormat("dd MMMM yyyy, h:mma").format(p.getDateCreated()) + ")");
+            contentAreaTxt.setText(p.getContent());
             
             commentPanel.removeAll();
-            sql = "SELECT * FROM comment WHERE post_id = " + Integer.toString(id);
-            rs = core.DB.getInstance().executeQuery(sql);
-            
-            while(rs.next()) {
-                String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(rs.getTimestamp("date_created"));
-                addPost(rs.getString("name"),
-                        rs.getString("comment"),
+
+            for (Comment c : p.getCommentCollection()) {
+                String dStr = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(c.getDateCreated());
+                addPost(c.getName(),
+                        c.getComment(),
                         dStr
                 );
             }
             
             validate();
-        } catch (SQLException ex) {
+        } catch (PersistenceException ex) {
             Logger.getLogger(ViewPostDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

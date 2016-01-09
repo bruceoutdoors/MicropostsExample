@@ -6,9 +6,7 @@
 package app;
 
 import java.awt.event.WindowEvent;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Calendar;
+import javax.persistence.PersistenceException;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -104,19 +102,19 @@ public class AddCommentDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addCommentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCommentBtnActionPerformed
-        String sql = "INSERT INTO comment (name, comment, post_id, date_created) VALUES (?, ?, ?, ?)";
-        
         try {
-            PreparedStatement ps = core.DB.getInstance().getPreparedStatement(sql);
-            ps.setString(1, nameField.getText());
-            ps.setString(2, commenTxtArea.getText());
-            ps.setInt(3, postId);
-            ps.setTimestamp(4, new java.sql.Timestamp(Calendar.getInstance().getTimeInMillis()));
+            Comment c = new Comment();
+            c.setComment(commenTxtArea.getText());
+            c.setName(nameField.getText());
+            c.setPostId((Post) core.DB.getInstance()
+                    .createNamedQuery("Post.findById")
+                    .setParameter("id", postId)
+                    .getSingleResult());
+            core.DB.getInstance().persist(c);
             
-            ps.executeUpdate();
             JOptionPane.showMessageDialog(this, "Comment has successfully been posted.", "Successfully added comment!", JOptionPane.INFORMATION_MESSAGE);
             dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        } catch (SQLException ex) {
+        } catch (PersistenceException ex) {
             JOptionPane.showMessageDialog(this, ex.toString(), "Invalid content", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_addCommentBtnActionPerformed

@@ -10,8 +10,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,15 +37,14 @@ public class MainWindow extends javax.swing.JFrame {
     private void refreshPosts() {
         postPanel.removeAll();
         core.DB db = core.DB.getInstance();
-        ResultSet rs = null;
         try {
-            rs = db.executeQuery("SELECT * FROM post ORDER BY date_created DESC");
-            while (rs.next()) {
-                String d = new SimpleDateFormat(" (MMM d)").format(rs.getTimestamp("date_created"));
-                addPost(rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("name") + d,
-                        rs.getString("content"));
+            List<Post> rs = db.createQuery("SELECT p FROM Post p ORDER BY p.dateCreated DESC").getResultList();
+            for (Post p : rs) {
+                String d = new SimpleDateFormat(" (MMM d)").format(p.getDateCreated());
+                addPost(p.getId(),
+                        p.getTitle(),
+                        p.getName() + d,
+                        p.getContent());
             }
         } catch (Exception ex) {
             System.err.println(ex.toString());
